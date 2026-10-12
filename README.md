@@ -109,4 +109,4 @@ See [CONTRIBUTING.md](CONTRIBUTING.md), [GOVERNANCE.md](GOVERNANCE.md), [SUPPORT
 
 ## Licences
 
-Code: [MIT](LICENSE.md). Trademark **data** from the USPTO and EUIPO is governed by those offices' terms.
+Code: [MIT](LICENSE). Trademark **data** from the USPTO and EUIPO is governed by those offices' terms.
