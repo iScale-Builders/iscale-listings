@@ -48,7 +48,7 @@
     "zod": "^3.24.1"
   },
   "devDependencies": {
-    "@playwright/test": "^1.60.0",
+    "@playwright/test": "^1.64.0",
     "@types/chrome": "^0.1.43",
     "@types/node": "^22.19.19",
     "@types/pg": "8.23.1",
