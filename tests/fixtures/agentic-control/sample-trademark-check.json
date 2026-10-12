@@ -1,0 +1,10 @@
+{
+  "action": "iscale.trademark.check",
+  "mode": "plan",
+  "request": {
+    "text": "Funny cat dad shirt",
+    "classes": ["025"],
+    "include_dead": false,
+    "jurisdictions": ["US", "EUIPO"]
+  }
+}

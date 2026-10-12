@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<trademark-applications-daily>
+  <application-information>
+    <file-segments>
+      <action-keys>
+        <case-file>
+          <serial-number>88123456</serial-number>
+          <registration-number>6234567</registration-number>
+          <case-file-header>
+            <filing-date>20190315</filing-date>
+            <registration-date>20200601</registration-date>
+            <status-code>700</status-code>
+            <mark-identification>CAT DAD</mark-identification>
+            <mark-drawing-code>4</mark-drawing-code>
+          </case-file-header>
+          <case-file-owners>
+            <case-file-owner>
+              <party-name>Pawsome Designs LLC</party-name>
+            </case-file-owner>
+          </case-file-owners>
+          <classifications>
+            <classification>
+              <international-code>025</international-code>
+            </classification>
+          </classifications>
+        </case-file>
+        <case-file>
+          <serial-number>88654321</serial-number>
+          <case-file-header>
+            <filing-date>20200101</filing-date>
+            <status-code>602</status-code>
+            <mark-identification>MOUNTAIN DEW</mark-identification>
+            <mark-drawing-code>1</mark-drawing-code>
+          </case-file-header>
+          <case-file-owners>
+            <case-file-owner>
+              <party-name>PepsiCo Inc.</party-name>
+            </case-file-owner>
+          </case-file-owners>
+          <classifications>
+            <classification>
+              <international-code>021</international-code>
+            </classification>
+          </classifications>
+        </case-file>
+        <case-file>
+          <serial-number>88999999</serial-number>
+          <case-file-header>
+            <filing-date>20210501</filing-date>
+            <status-code>300</status-code>
+            <mark-identification>DEAD MARK</mark-identification>
+            <mark-drawing-code>4</mark-drawing-code>
+          </case-file-header>
+          <classifications>
+            <classification>
+              <international-code>025</international-code>
+            </classification>
+          </classifications>
+        </case-file>
+        <case-file>
+          <serial-number>89000001</serial-number>
+          <case-file-header>
+            <filing-date>20210601</filing-date>
+            <status-code>800</status-code>
+            <mark-identification>LOGO ONLY</mark-identification>
+            <mark-drawing-code>3</mark-drawing-code>
+          </case-file-header>
+          <classifications>
+            <classification>
+              <international-code>025</international-code>
+            </classification>
+          </classifications>
+        </case-file>
+      </action-keys>
+    </file-segments>
+  </application-information>
+</trademark-applications-daily>

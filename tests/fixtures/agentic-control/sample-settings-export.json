@@ -1,0 +1,15 @@
+{
+  "type": "iscale-listings-settings",
+  "version": "0.5.81",
+  "exportedAt": "2026-06-30T00:00:00.000Z",
+  "config": {
+    "fields": [
+      { "id": "headline", "name": "Headline", "maxChars": 100 },
+      { "id": "tagline", "name": "Tagline", "maxChars": 80 }
+    ],
+    "customInstructions": "Write punchy minimal copy.",
+    "maxKeywords": 5,
+    "productVariants": ["mug", "cup"],
+    "trademarkClasses": ["021"]
+  }
+}

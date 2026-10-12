@@ -1,0 +1,19 @@
+{
+  "//": "Headless boundary, TYPE-ENFORCED. The core must run in the extension AND in plain Node (the CLI/dry-run), so it may use only cross-platform globals. lib is ES2020 with NO 'DOM' and types is ['node'] with NO 'chrome' — so any document/window/navigator/localStorage/chrome reference fails `tsc -p listing-core-runtime` at compile time, backing up headless.guard.test.ts. Web-ish APIs the core does use (fetch, Response, Headers, AbortController, URL) resolve via @types/node.",
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "lib": ["ES2020"],
+    "types": ["node"],
+    "strict": true,
+    "noEmit": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "baseUrl": ".",
+    "paths": { "@/*": ["./src/*"] }
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules", "**/*.test.ts"]
+}

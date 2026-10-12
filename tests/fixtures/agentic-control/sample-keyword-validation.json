@@ -1,0 +1,27 @@
+{
+  "action": "iscale.keyword.validate",
+  "mode": "offline",
+  "candidates": [
+    {
+      "id": "kw-cat-dad",
+      "word": "cat dad",
+      "source": "manual",
+      "isPhrase": true
+    },
+    {
+      "id": "kw-retro",
+      "word": "retro",
+      "source": "manual",
+      "isPhrase": false
+    }
+  ],
+  "productVariants": ["shirt", "tshirt", "t-shirt"],
+  "autosuggest": {
+    "cat dad shirt": ["cat dad shirt", "cat dad gifts"],
+    "cat dad tshirt": ["cat dad tshirt"],
+    "cat dad t-shirt": ["cat dad t shirt"],
+    "retro shirt": ["retro gaming shirt"],
+    "retro tshirt": [],
+    "retro t-shirt": []
+  }
+}

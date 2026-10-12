@@ -1,0 +1,74 @@
+{
+  "name": "iscale-listings",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Trademark screening plus keyword/listing generation for print-on-demand — Chrome extension, headless core, and API.",
+  "license": "MIT",
+  "engines": {
+    "node": ">=20.9"
+  },
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint .",
+    "dev:restart": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/restart_local_dev.ps1",
+    "db:production-monitor": "python scripts/production_freshness_monitor.py",
+    "agentic:dry-run": "node scripts/agentic_dry_run.mjs",
+    "subai:bridge": "node listing-core-runtime/subscription-ai-bridge.mjs",
+    "git:hygiene": "python scripts/pre_git_hygiene.py",
+    "git:status": "python scripts/git_sync_status.py",
+    "final:preflight": "python scripts/final_preflight.py",
+    "release:status": "python scripts/release_status.py",
+    "db:migration:dry-run": "python scripts/apply_multi_jurisdiction_migration.py",
+    "import:euipo": "python scripts/import_euipo.py",
+    "probe:euipo": "python scripts/probe_euipo_public_access.py",
+    "probe:euipo-search": "python scripts/euipo_search_probe.py",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:api": "vitest run tests/api",
+    "test:lib": "vitest run tests/lib",
+    "test:sdk": "vitest run tests/sdk",
+    "test:e2e": "playwright test",
+    "test:verify": "npm run lint && npx tsc --noEmit && npm run typecheck:core && npm run typecheck:extension && npm test && npm run test:sdk",
+    "build:extension": "node extension/build.mjs",
+    "typecheck:extension": "tsc --noEmit -p extension/tsconfig.json",
+    "typecheck:core": "tsc -p listing-core-runtime/tsconfig.json",
+    "iscale": "node cli/iscale.mjs",
+    "helper": "node cli/iscale.mjs helper"
+  },
+  "dependencies": {
+    "@openai/codex-sdk": "0.156.0",
+    "@supabase/supabase-js": "^2.108.1",
+    "next": "15.5.27",
+    "pg": "8.23.0",
+    "playwright-core": "^1.60.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.60.0",
+    "@types/chrome": "^0.1.43",
+    "@types/node": "^22.19.19",
+    "@types/pg": "8.23.1",
+    "@types/react": "^18.3.29",
+    "@types/react-dom": "^18.3.5",
+    "esbuild": "^0.28.1",
+    "eslint": "^8.57.1",
+    "eslint-config-next": "^15.5.21",
+    "postcss": "^8.5.25",
+    "typescript": "^5.7.3",
+    "vitest": "^4.1.10"
+  },
+  "overrides": {
+    "postcss": "$postcss",
+    "js-yaml": "^4.3.1",
+    "nanoid": "^3.3.17",
+    "sharp": "0.35.5",
+    "source-map-js": "1.2.2"
+  },
+  "bin": {
+    "iscale": "cli/iscale.mjs"
+  }
+}

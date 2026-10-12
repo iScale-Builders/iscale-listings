@@ -1,0 +1,24 @@
+{
+  "action": "iscale.listing.screen",
+  "mode": "live",
+  "listing": {
+    "title": "Little Lessons Lasting Light Retro Teacher Art",
+    "brand": "LessonLumen Studio",
+    "bullets": [
+      "Retro teacher art with colorful academic graphics.",
+      "For teachers and teaching assistants who help learners find brighter paths."
+    ],
+    "description": "Little Lessons Lasting Light retro teacher art by LessonLumen Studio, featuring colorful academic graphics for teachers and teaching assistants who help learners find brighter paths.",
+    "keywords": [
+      "retro teacher",
+      "lasting lessons",
+      "academic art",
+      "teaching assistant"
+    ]
+  },
+  "request": {
+    "classes": ["025"],
+    "include_dead": false,
+    "jurisdictions": ["US", "EUIPO"]
+  }
+}

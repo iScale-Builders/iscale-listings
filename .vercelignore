@@ -1,0 +1,16 @@
+.git
+node_modules
+.env*
+!.env.local.example
+private-data
+backups
+reports
+**/*.dump
+**/*.sqlite
+**/*.sqlite3
+**/*.db
+cookies*.json
+profile*.json
+listings.json
+shop-risk-report.json
+shop-alerts.json

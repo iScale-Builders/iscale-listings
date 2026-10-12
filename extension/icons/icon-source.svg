@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="iScale Listings icon">
+  <rect width="128" height="128" rx="24" fill="#ea4800"/>
+  <circle cx="38" cy="37" r="13" fill="#ffffff"/>
+  <circle cx="38" cy="37" r="7" fill="#ea4800"/>
+  <path d="M45 45l13 13" stroke="#ffffff" stroke-width="9" stroke-linecap="round"/>
+  <rect x="31" y="57" width="16" height="38" rx="8" fill="#ffffff"/>
+  <rect x="62" y="28" width="19" height="67" rx="8.5" fill="#ffffff"/>
+  <rect x="62" y="77" width="42" height="18" rx="8.5" fill="#ffffff"/>
+  <rect x="82" y="77" width="22" height="18" rx="8.5" fill="#f5a623"/>
+  <path d="M47 47l8 8" stroke="#1a1a1a" stroke-width="3" stroke-linecap="round"/>
+</svg>

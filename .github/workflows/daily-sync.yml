@@ -1,0 +1,41 @@
+name: Daily USPTO Sync
+
+permissions:
+  contents: read
+
+concurrency:
+  group: daily-sync
+  cancel-in-progress: false
+
+on:
+  schedule:
+    # Run daily at 3:00 AM EST (8:00 AM UTC)
+    - cron: '0 8 * * *'
+  workflow_dispatch:
+    # Allow manual trigger from GitHub Actions tab
+
+jobs:
+  sync:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install lxml psycopg2-binary
+
+      - name: Run daily sync
+        env:
+          USPTO_API_KEY: ${{ secrets.USPTO_API_KEY }}
+          TM_DB_URL: ${{ secrets.TM_DB_URL }}
+        run: |
+          FROM_DATE=$(date -u -d '7 days ago' +%Y-%m-%d)
+          TO_DATE=$(date -u +%Y-%m-%d)
+          python scripts/backfill_direct.py "$FROM_DATE" "$TO_DATE" --record-sync-metadata

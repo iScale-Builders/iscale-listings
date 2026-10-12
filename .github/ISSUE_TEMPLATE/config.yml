@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Security, private support or conduct
+    url: mailto:contact@iscalelabs.com
+    about: Contact privately; do not send secrets or unredacted user data.

@@ -1,0 +1,257 @@
+name: Pre-merge
+
+# Universal pre-merge gate — self-contained.
+#
+# Each iScale-Builders repo copies this workflow into its own
+# `.github/workflows/pre-merge.yml` (no cross-repo reusable workflow
+# dependency — that was attempted in PR #13/#14 but blocked at startup
+# validation by GitHub Actions for reasons that didn't surface a
+# diagnostic). The copy-paste pattern is less DRY but resilient and
+# debuggable per-repo. See `governance/ci-policy.md`.
+
+on:
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  secrets-scan:
+    name: Secrets scan (gitleaks)
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - name: Install gitleaks (binary install — avoids sponsorware license gate)
+        run: |
+          set -euo pipefail
+          GITLEAKS_VERSION="8.18.4"
+          curl -fsSL "https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}/gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz" | tar -xz gitleaks
+          sudo install -m 0755 gitleaks /usr/local/bin/gitleaks
+          gitleaks version
+      - name: Scan PR diff
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          set -euo pipefail
+          echo "Scanning PR diff $BASE_SHA..$HEAD_SHA"
+          gitleaks detect --source . --redact --no-banner --log-opts="${BASE_SHA}..${HEAD_SHA}" --exit-code 1
+          echo "✓ no secrets found"
+
+  file-deny:
+    name: File-deny scan
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - name: Scan for denied filenames in PR diff
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          set -euo pipefail
+          FILES=$(git diff --name-only "$BASE_SHA" "$HEAD_SHA")
+          echo "Scanning PR diff $BASE_SHA..$HEAD_SHA"
+          DENY_REGEX='(^|/)\.env(\..+)?$|(^|/)credentials\.md$|\.(pem|key|p8|p12|pfx)$|service-account.*\.json$|.*-credentials\.json$'
+          ENV_EXAMPLE_ALLOW_REGEX='(^|/)\.env(\..+)?\.example$'
+          DENIED=$(echo "$FILES" | grep -iE "$DENY_REGEX" | grep -ivE "$ENV_EXAMPLE_ALLOW_REGEX" || true)
+          if [ -n "$DENIED" ]; then
+            echo "::error::Denied filenames present in PR — see governance/secrets-policy.md"
+            echo "Files matched:"
+            echo "$DENIED" | sed 's/^/  - /'
+            exit 1
+          fi
+          echo "✓ no denied filenames"
+
+  pii-scrub:
+    name: PII scrub
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - name: Scan PR diff for PII patterns
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          set -euo pipefail
+          # Scope:
+          # - exclude lockfiles (large noise, deterministic content)
+          # - exclude the CI policy doc + this very workflow file (they DESCRIBE the regex by
+          #   necessity — gmail/outlook/etc. tokens appear as examples of what we ban, not as
+          #   real leaks). Self-exclude before recursion eats us.
+          DIFF=$(git diff "$BASE_SHA" "$HEAD_SHA" -- \
+            ':!*.lock' ':!package-lock.json' ':!yarn.lock' ':!pnpm-lock.yaml' \
+            ':!governance/ci-policy.md' \
+            ':!.github/workflows/pre-merge.yml')
+          # Only ADDED lines (start with `+` but not `+++` diff header) — deletions can't leak.
+          ADDED=$(echo "$DIFF" | grep -E '^\+[^+]' || true)
+          PII_REGEX='C:[\\/]+Users[\\/]+[A-Za-z][A-Za-z0-9_-]+|[A-Za-z0-9._%+-]+@(gmail|outlook|hotmail|yahoo|icloud)\.com|(^|[^0-9.])192\.168\.[0-9]+\.[0-9]+|(^|[^0-9.])10\.[0-9]+\.[0-9]+\.[0-9]+|(^|[^0-9.])172\.(1[6-9]|2[0-9]|3[01])\.[0-9]+\.[0-9]+'
+          HITS=$(echo "$ADDED" | grep -nEh "$PII_REGEX" || true)
+          if [ -n "$HITS" ]; then
+            echo "::error::PII pattern matches in PR diff — see governance/secrets-policy.md (in platform-docs)"
+            echo "$HITS" | head -50 | sed 's/^/  /'
+            exit 1
+          fi
+          echo "✓ no PII patterns in PR diff"
+
+  python-lint:
+    name: Python lint (ruff)
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Install ruff
+        run: pip install ruff
+      - name: Determine changed Python files
+        id: changed
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          set -euo pipefail
+          # Scope to changed files only — pre-existing scripts are grandfathered.
+          # As files get edited they get cleaned up incrementally; no big-bang lint sweep.
+          FILES=$(git diff --name-only --diff-filter=AM "$BASE_SHA" "$HEAD_SHA" -- '*.py' | tr '\n' ' ')
+          echo "Changed Python files: $FILES"
+          echo "files=$FILES" >> "$GITHUB_OUTPUT"
+      - name: Lint changed Python files
+        if: steps.changed.outputs.files != ''
+        run: ruff check ${{ steps.changed.outputs.files }}
+      - name: Syntax-check changed Python files
+        if: steps.changed.outputs.files != ''
+        run: python -m py_compile ${{ steps.changed.outputs.files }}
+
+  next-typecheck:
+    name: Next.js typecheck
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+      - name: Set up Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - name: Install deps
+        run: npm ci
+      - name: Typecheck
+        run: npx tsc --noEmit
+      - name: Typecheck extension
+        run: npm run typecheck:extension
+      - name: Typecheck core (headless boundary)
+        run: npm run typecheck:core
+      # Full `next build` deliberately omitted — needs real Supabase
+      # env vars at build time, which we don't want to plumb into CI. The
+      # Vercel preview deploy on the PR exercises the real build path
+      # against staging-style env. Promote to a build job here when we
+      # have non-secret CI-only env vars to set.
+
+  lint:
+    name: Lint (eslint)
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+      - name: Set up Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - name: Install deps
+        run: npm ci
+      # `npm run lint` (eslint .) was in local `test:verify` but ran nowhere in
+      # CI, so a lint error could merge. Covers app/, extension/, lib/, sdk/
+      # (listing-core-runtime is eslint-ignored; it's gated by typecheck:core).
+      - name: Lint
+        run: npm run lint
+
+  tests:
+    name: Unit tests (vitest)
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+      - name: Set up Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - name: Install deps
+        run: npm ci
+      # Runs BOTH vitest projects: `app` (tests/**, including tests/scripts/**
+      # which spawn the python release-gate scripts — they are hermetic, using
+      # temp dirs and committed data files) and `core`
+      # (listing-core-runtime/src/**/*.test.ts) — see vitest.config.ts.
+      # Before this job existed, PRs merged without any test run in CI.
+      #
+      # NOTE: do not try to filter with `vitest run --exclude` here — with the
+      # `projects` config in vitest.config.ts the CLI exclude does not reach
+      # project-level includes and is silently ignored.
+      - name: Run test suite
+        run: npm test
+
+  dependency-audit:
+    name: Production dependency audit
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+      - name: Set up Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - name: Install deps
+        run: npm ci
+      - name: Audit production dependencies
+        run: npm audit --omit=dev --audit-level=high
+
+  sdk-tests:
+    name: SDK unit tests
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+      - name: Set up Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - name: Install deps
+        run: npm ci
+      - name: Run SDK tests
+        run: npm run test:sdk
+
+  extension-build:
+    name: Extension build
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+      - name: Set up Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - name: Install deps
+        run: npm ci
+      - name: Build extension
+        run: npm run build:extension
+

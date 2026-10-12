@@ -1,0 +1,7 @@
+{
+  "extends": ["next/core-web-vitals"],
+  "ignorePatterns": ["listing-core-runtime/**"],
+  "rules": {
+    "@next/next/no-page-custom-font": "off"
+  }
+}

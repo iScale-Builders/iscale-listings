@@ -1,0 +1,87 @@
+# dependencies
+node_modules/
+sdk/node_modules/
+
+# next.js
+.next/
+out/
+
+# chrome extension build output (run `npm run build:extension` to regenerate)
+extension/dist/
+
+# env files
+.env
+.env.*
+.env.local
+.env.*.local
+!.env.local.example
+credentials.md
+credentials/
+*.pem
+*.key
+*.p8
+*.p12
+service-account*.json
+*-service-account.json
+*.service-account.json
+
+# vercel
+.vercel
+
+# misc
+*.tsbuildinfo
+*.log
+next-env.d.ts
+*.db
+*.sqlite
+*.sqlite3
+storage-state*.json
+.playwright/.auth/
+.playwright-mcp/
+playwright-report/
+test-results/
+screenshots/
+*.har
+
+# local trademark source deliveries / import scratch
+data/deliveries/
+data/uspto/
+source-deliveries/
+import-deliveries/
+downloads/
+tmp/
+temp/
+
+# python
+__pycache__/
+*.pyc
+.venv/
+
+# IDE
+.vscode/
+.idea/
+
+.vercel
+
+# Secret and build hygiene baseline
+secrets/
+tokens/
+keys/
+*.pfx
+dist/
+build/
+.vercel/
+
+# Private user data, reports, backups and browser state (never release these).
+/private-data/
+/backups/
+/reports/
+*.dump
+*.sqlite
+*.sqlite3
+*.db
+/cookies*.json
+/profile*.json
+/listings.json
+/shop-risk-report.json
+/shop-alerts.json

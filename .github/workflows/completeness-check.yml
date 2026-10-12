@@ -1,0 +1,34 @@
+name: Trademark Completeness Check
+
+permissions:
+  contents: read
+
+# Weekly guard against silent data gaps (cf. the 2025-06..2026-02 stale-status gap).
+# Fails the run — which emails repo admins — if it detects a registration cliff
+# or a stalled daily sync. Read-only.
+
+on:
+  schedule:
+    - cron: '0 13 * * 1'   # Mondays 13:00 UTC
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install psycopg2-binary
+
+      - name: Run completeness check
+        env:
+          TM_DB_URL: ${{ secrets.TM_DB_URL }}
+        run: python scripts/completeness_check.py
