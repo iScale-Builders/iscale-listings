@@ -41,7 +41,7 @@
     "@openai/codex-sdk": "0.156.0",
     "@supabase/supabase-js": "^2.108.1",
     "next": "15.5.27",
-    "pg": "8.23.0",
+    "pg": "8.23.1",
     "playwright-core": "^1.60.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
