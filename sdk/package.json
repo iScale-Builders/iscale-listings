@@ -1,0 +1,56 @@
+{
+  "name": "@iscale/trademark-checker",
+  "version": "0.1.1",
+  "description": "Lightweight SDK for the iScaleListings API",
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    },
+    "./highlight": {
+      "import": {
+        "types": "./dist/highlight.d.ts",
+        "default": "./dist/highlight.js"
+      },
+      "require": {
+        "types": "./dist/highlight.d.cts",
+        "default": "./dist/highlight.cjs"
+      }
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "sideEffects": false,
+  "scripts": {
+    "build": "tsup",
+    "test": "cd .. && vitest run tests/sdk",
+    "test:watch": "vitest"
+  },
+  "peerDependencies": {
+    "mark.js": "^8.11.1"
+  },
+  "peerDependenciesMeta": {
+    "mark.js": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@types/mark.js": "^8.11.12",
+    "mark.js": "^8.11.1",
+    "tsup": "^8.3.5",
+    "typescript": "^5.7.3",
+    "vitest": "^4.1.7"
+  }
+}

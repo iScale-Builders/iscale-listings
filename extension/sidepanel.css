@@ -1,0 +1,269 @@
+:root { --hi: #ea4800; --lo: #f5a623; }
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html, body { margin: 0; padding: 0; height: 100%; }
+body {
+  font: 14px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  color: #1a1a1a;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+}
+.ver { font-size: 12px; font-weight: 700; color: var(--hi); background: #fff0e9; border: 1px solid #ffd2bd; border-radius: 10px; padding: 2px 9px; white-space: nowrap; }
+.modetabs { display: flex; gap: 0; padding: 0 16px; border-bottom: 1px solid #e0e0e0; background: #fafafa; }
+.modetab { appearance: none; background: none; border: none; border-bottom: 2px solid transparent; margin-bottom: -1px; padding: 9px 14px; font-size: 13px; font-weight: 600; color: #888; cursor: pointer; }
+.modetab:hover { color: var(--hi); }
+.modetab-active { color: var(--hi); border-bottom-color: var(--hi); }
+.cats { display: flex; flex-wrap: wrap; gap: 6px; padding: 12px 16px; border-bottom: 1px solid #eee; }
+.cat { padding: 5px 12px; border: 1px solid #ccc; border-radius: 16px; background: #fff; cursor: pointer; font-size: 12px; color: #555; }
+.cat:hover { filter: brightness(0.97); }
+.cat-active { background: var(--hi); color: #fff; border-color: var(--hi); }
+.juris-row { display: flex; align-items: center; gap: 8px; padding: 10px 16px 0; }
+.juris-label { font-size: 11px; color: #777; text-transform: uppercase; letter-spacing: .04em; }
+.juris { display: inline-flex; border: 1px solid #ccc; border-radius: 16px; overflow: hidden; }
+.juris-btn { padding: 4px 11px; border: 0; border-right: 1px solid #ccc; background: #fff; cursor: pointer; font-size: 12px; color: #555; }
+.juris-btn:last-child { border-right: 0; }
+.juris-active { background: var(--hi); color: #fff; }
+.legend { display: flex; flex-wrap: wrap; gap: 7px 12px; padding: 8px 16px; border-bottom: 1px solid #eee; }
+.leg { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; color: #666; }
+.leg-dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
+.leg-break { flex-basis: 100%; height: 0; }
+.leg-status { color: #555; font-weight: 600; }
+.leg-swatch { width: 22px; height: 13px; border-radius: 2px; display: inline-block; }
+.leg-live { box-shadow: inset 0 0 0 1px rgba(0,0,0,.42); }
+.leg-dead { width: auto; height: auto; font-size: 11px; color: #333; line-height: 13px; }
+.clearbtn { display: block; width: calc(100% - 32px); margin: 0 16px 10px; padding: 6px 10px; background: #fff; border: 1px solid #ddd; border-radius: 6px; font-size: 12px; color: #888; cursor: pointer; }
+.clearbtn:hover { border-color: #e53935; color: #e53935; }
+.scan { display: block; width: calc(100% - 32px); margin: 12px 16px 4px; padding: 10px; background: var(--hi); color: #fff; border: none; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; }
+.scan:hover { opacity: .92; }
+.scan:disabled { opacity: .55; cursor: default; }
+.tip { margin: 0 16px 8px; font-size: 12px; color: #999; }
+.status-filters { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 16px 8px; }
+.status-filter { display: inline-flex; align-items: center; gap: 5px; padding: 4px 8px; border: 1px solid #ddd; border-radius: 13px; background: #fff; color: #666; font-size: 11px; font-weight: 600; cursor: pointer; user-select: none; }
+.status-filter:hover { border-color: var(--hi); color: var(--hi); }
+.status-filter input { margin: 0; accent-color: var(--hi); cursor: pointer; }
+.toggle { display: flex; align-items: center; gap: 6px; margin: 0 16px 10px; font-size: 12px; color: #666; cursor: pointer; user-select: none; }
+.toggle input { margin: 0; cursor: pointer; accent-color: var(--hi); }
+.body { padding: 8px 16px 24px; overflow-y: auto; flex: 1; }
+.hint { color: #888; font-size: 13px; line-height: 1.5; }
+.mini { color: #aaa; font-size: 11px; margin-top: 6px; }
+.loading { display: flex; align-items: center; gap: 10px; color: #666; padding: 8px 0; }
+.loading-txt { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+.loading-quip { font-size: 13px; font-weight: 600; color: #444; }
+.loading-sub { font-size: 11px; color: #aaa; }
+.spin { width: 18px; height: 18px; border: 2px solid #e0e0e0; border-top-color: var(--hi); border-radius: 50%; animation: spin .7s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.clear { color: #2e7d32; font-weight: 600; }
+.count { font-weight: 700; margin: 8px 0; color: var(--hi); }
+.stale { font-size: 12px; color: #b26a00; background: #fff7e6; border: 1px solid #ffe0a3; border-radius: 6px; padding: 6px 8px; margin-bottom: 8px; }
+.list { display: flex; flex-direction: column; gap: 4px; }
+.row { padding: 8px 10px; border-radius: 6px; cursor: pointer; border-left: 3px solid transparent; background: #fafafa; }
+.row:hover { background: #f0f0f0; }
+.rw { font-weight: 600; font-size: 13px; }
+.rdot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 6px; vertical-align: middle; }
+.rm { font-size: 11px; color: #888; margin-top: 2px; }
+.hidden-note { font-size: 11px; color: #aaa; margin-top: 10px; }
+.err { background: #fff3f0; border: 1px solid #ffccc7; border-radius: 6px; padding: 12px; font-size: 13px; line-height: 1.5; }
+.err strong { color: #cf1322; }
+.err p { margin: 4px 0 0; color: #555; }
+.foot { padding: 6px 16px; border-top: 1px solid #eee; background: #fafafa; font-size: 11px; color: #aaa; text-align: right; }
+.featuretabs { display: flex; align-items: center; gap: 0; padding: 0 12px 0 16px; border-bottom: 2px solid #e0e0e0; background: #fff; }
+.tabs-right { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+.tabs-right .ver { margin-left: 0; }
+.ftab { appearance: none; background: none; border: none; border-bottom: 3px solid transparent; margin-bottom: -2px; padding: 11px 16px; font-size: 14px; font-weight: 700; color: #999; cursor: pointer; }
+.ftab:hover { color: var(--hi); }
+.ftab-active { color: var(--hi); border-bottom-color: var(--hi); }
+.view { display: flex; flex-direction: column; flex: 1; min-height: 0; }
+.view[hidden] { display: none; }
+.kw-settings { display: flex; gap: 8px; padding: 12px 16px; border-bottom: 1px solid #eee; }
+.kw-input { flex: 1; min-width: 0; padding: 7px 9px; border: 1px solid #ccc; border-radius: 6px; font-size: 13px; }
+#kw-provider { flex: 0 0 96px; }
+.kw-grab { display: block; width: calc(100% - 32px); margin: 12px 16px 4px; padding: 10px; background: #fff; color: var(--hi); border: 1.5px solid var(--hi); border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; }
+.kw-grab:hover { background: #fff0e9; }
+.kw-grab:disabled { opacity: .6; cursor: default; }
+#kw-grab-note { margin: 0 16px 4px; }
+.kw-preview { display: block; max-height: 130px; max-width: calc(100% - 32px); margin: 0 16px 8px; border-radius: 8px; border: 1px solid #eee; object-fit: contain; }
+/* The preview doubles as the file picker (label wrapping #kw-file): the empty
+   placeholder is the clickable "Choose image" slot; once a design loads, the
+   <img> shows in its place. Replaces the old full-width dashed file box. */
+.kw-preview-slot { flex: 0 0 96px; width: 96px; align-self: stretch; display: flex; cursor: pointer; }
+.kw-preview-empty { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; text-align: center; font-size: 11px; line-height: 1.4; color: #888; border: 1.5px dashed #ccc; border-radius: 8px; padding: 4px; }
+.kw-preview-slot:hover .kw-preview-empty { border-color: var(--hi); color: var(--hi); }
+.kw-analysis { font-size: 12px; color: #555; background: #fafafa; border: 1px solid #eee; border-radius: 6px; padding: 8px 10px; margin-bottom: 8px; line-height: 1.5; }
+.kw-bucket { margin: 10px 0; }
+.kw-bucket-h { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: #888; margin-bottom: 5px; }
+.kw-chips { display: flex; flex-wrap: wrap; gap: 5px; }
+.kw-chip { padding: 3px 9px; background: #f1f1f1; border: 1px solid #e2e2e2; border-radius: 13px; font-size: 12px; color: #333; cursor: pointer; }
+.kw-chip:hover { background: var(--hi); border-color: var(--hi); color: #fff; }
+.kw-chip-cert { background: #e9f7ef; border-color: #ade0c0; color: #1c7a43; }
+.kw-chip-faint { opacity: .6; }
+.kw-chip-search { appearance: none; background: none; border: none; padding: 0; margin-left: 4px; font-size: 11px; line-height: 1; cursor: pointer; opacity: .6; display: inline-block; vertical-align: middle; }
+.kw-chip-search:hover { opacity: 1; transform: scale(1.15); }
+.kw-tm-btn { appearance: none; border: none; background: rgba(229,72,77,.16); color: #e5484d; font-weight: 800; font-size: 12px; line-height: 1; padding: 2px 6px; margin-left: 4px; border-radius: 6px; cursor: pointer; vertical-align: middle; }
+.kw-tm-btn:hover { background: #e5484d; color: #fff; }
+.kw-copy { float: right; font-size: 11px; color: var(--hi); cursor: pointer; font-weight: 600; }
+/* Two floated links in the "AI prompt rules" header (Save + Reset) — keep a gap
+   so they don't collide; the save link goes green while flashing "✓ Saved". */
+#kw-instructions-reset { margin-left: 10px; }
+/* Same: "Copy all" + "↻ Regenerate" both float right in the Listing-fields
+   header — without a gap they read as "RegenerateCopy all". */
+#kw-copyfields { margin-left: 12px; }
+/* Prompt-preset 💾 save / 🗑 delete icon buttons. 💾 highlights when there are
+   unsaved name/rule changes (kw-dirty) and flashes green ✓ on save (kw-flash). */
+.kw-icon-btn { flex: 0 0 auto; appearance: none; background: #fff; border: 1px solid #ccc; border-radius: 6px; padding: 5px 8px; font-size: 14px; line-height: 1; cursor: pointer; }
+.kw-icon-btn:hover { border-color: var(--hi); }
+.kw-icon-btn.kw-dirty { border-color: var(--hi); background: #fff0e9; }
+.kw-icon-btn.kw-flash { border-color: #1c7a43; background: #e9f7ef; }
+.kw-settings-2 { padding-top: 0; border-bottom: 1px solid #eee; align-items: center; gap: 10px; }
+.kw-mode-label { font-size: 12px; color: #666; white-space: nowrap; }
+.kw-section-h { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: #888; margin: 14px 0 7px; }
+.kw-field { background: #fafafa; border: 1px solid #eee; border-radius: 7px; padding: 8px 10px; margin-bottom: 7px; }
+.kw-field-h { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
+.kw-field-name { font-size: 11px; font-weight: 700; color: #555; }
+.kw-field-count { font-size: 11px; color: #aaa; margin-left: auto; }
+.kw-field-count.kw-ok { color: #1c7a43; font-weight: 700; }
+.kw-field-h .kw-copy { float: none; }
+.kw-field-copy { appearance: none; background: #fff; border: 1px solid #ddd; border-radius: 6px; padding: 2px 8px; font-size: 11px; font-weight: 600; color: var(--hi); cursor: pointer; white-space: nowrap; }
+.kw-field-copy:hover { border-color: var(--hi); background: #fff0e9; }
+.kw-field-copy.kw-copied { color: #1c7a43; border-color: #ade0c0; background: #e9f7ef; cursor: default; }
+.kw-field-body { font-size: 13px; color: #1a1a1a; line-height: 1.4; word-break: break-word; }
+.kw-bar { height: 3px; background: #eee; border-radius: 2px; margin-top: 6px; overflow: hidden; }
+.kw-bar span { display: block; height: 100%; background: var(--hi); }
+.kw-tm { font-size: 12px; border-radius: 7px; padding: 9px 11px; margin: 10px 0; line-height: 1.5; }
+.kw-tm-ok { background: #e9f7ef; border: 1px solid #ade0c0; color: #1c7a43; }
+.kw-tm-warn { background: #fff7e6; border: 1px solid #ffe0a3; color: #b26a00; }
+.kw-tm-list { margin: 6px 0 0; padding-left: 16px; }
+.kw-tm-was { text-decoration: line-through; opacity: .7; }
+.kw-tm-why { color: #999; font-size: 11px; }
+.kw-meta { font-size: 11px; color: #aaa; margin-top: 8px; }
+.kw-details { margin-top: 12px; }
+.kw-details summary { font-size: 12px; color: #888; cursor: pointer; }
+.kw-model-wrap { flex: 1; min-width: 0; display: flex; }
+.kw-model-wrap[hidden] { display: none; }
+.kw-model-wrap select { flex: 1; min-width: 0; }
+#kw-mode { flex: 0 0 110px; }
+.kw-textarea { width: 100%; min-height: 96px; resize: vertical; padding: 7px 9px; border: 1px solid #ccc; border-radius: 6px; font: 12px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; line-height: 1.45; color: #333; }
+.kw-textarea:focus { outline: none; border-color: var(--hi); }
+.kw-cfg-h .kw-copy { float: right; }
+.kw-toggle { margin: 10px 16px 0; }
+.kw-cfg { margin: 8px 16px 0; border: 1px solid #eee; border-radius: 7px; }
+.kw-cfg > summary { padding: 8px 10px; font-size: 12px; font-weight: 600; color: #666; cursor: pointer; }
+.kw-cfg-body { padding: 0 10px 10px; }
+.kw-cfg-h { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: #888; margin: 4px 0 6px; }
+.kw-field-row { display: flex; gap: 6px; margin-bottom: 5px; align-items: center; }
+.kw-f-name { flex: 1; min-width: 0; }
+.kw-f-max { flex: 0 0 56px; text-align: center; }
+.kw-x { background: none; border: none; color: #bbb; cursor: pointer; font-size: 15px; line-height: 1; padding: 0 2px; }
+.kw-x:hover { color: #e53935; }
+.kw-mini-btn { background: #fff; border: 1px solid #ccc; border-radius: 6px; padding: 5px 10px; font-size: 12px; color: #555; cursor: pointer; }
+.kw-mini-btn:hover { border-color: var(--hi); color: var(--hi); }
+.kw-fp-row { display: flex; gap: 6px; margin-bottom: 6px; align-items: center; }
+.kw-fp-row select, .kw-fp-row input { flex: 1; min-width: 0; }
+/* Prompt-preset combobox: an editable name input + ▾ toggle, with the full
+   preset list as a popup (unfiltered — typing never hides options). */
+.kw-combo { position: relative; flex: 1; min-width: 0; display: flex; align-items: stretch; background: #fff; border: 1px solid #ccc; border-radius: 6px; }
+.kw-combo:focus-within { border-color: var(--hi); }
+.kw-combo .kw-input { flex: 1; min-width: 0; border: 0; border-radius: 6px 0 0 6px; outline: none; background: transparent; }
+.kw-combo .kw-icon-btn { border: 0; border-radius: 0 6px 6px 0; background: transparent; padding: 0 10px; font-size: 16px; color: #333; }
+.kw-combo .kw-icon-btn:hover { color: var(--hi); }
+.kw-combo-list { position: absolute; top: calc(100% + 2px); left: 0; right: 0; z-index: 40; margin: 0; padding: 2px; list-style: none; background: #fff; border: 1px solid #ccc; border-radius: 6px; box-shadow: 0 4px 14px rgba(0,0,0,.14); max-height: 176px; overflow-y: auto; }
+.kw-combo-list li { padding: 6px 8px; font-size: 13px; border-radius: 4px; cursor: pointer; }
+.kw-combo-list li:hover, .kw-combo-list li.kw-active { background: #fff0e9; }
+.kw-combo-list li[aria-selected="true"] { font-weight: 700; }
+.kw-icon-btn { flex: 0 0 auto; background: #fff; border: 1px solid #ccc; border-radius: 6px; padding: 4px 7px; font-size: 14px; line-height: 1; cursor: pointer; }
+.kw-icon-btn:hover { border-color: var(--hi); }
+.kw-icon-btn:disabled { opacity: .45; cursor: default; }
+.kw-mini-btn:disabled { opacity: .45; cursor: default; }
+.kw-ban-add { display: flex; gap: 6px; margin-bottom: 6px; }
+.kw-bans { display: flex; flex-wrap: wrap; gap: 4px; max-height: 96px; overflow-y: auto; }
+.kw-ban { display: inline-flex; align-items: center; gap: 2px; background: #fff3e0; border: 1px solid #ffd9a8; color: #b26a00; border-radius: 11px; padding: 1px 4px 1px 8px; font-size: 11px; }
+.kw-ban .kw-x { font-size: 13px; }
+.kw-sub { font-size: 11px; color: #999; margin-bottom: 4px; }
+.kw-chip-sel-cert { background: #1c7a43; border-color: #1c7a43; color: #fff; }
+.kw-chip-sel-un { background: #ef9c3a; border-color: #ef9c3a; color: #fff; }
+.kw-chip-av-cert { background: #e9f7ef; border-color: #ade0c0; color: #1c7a43; }
+.kw-chip-av-un { background: #fff3e0; border-color: #f6c98a; color: #b26a00; }
+/* Couldn't be verified (autosuggest didn't respond) — dashed + muted so it reads
+   as "unchecked", distinct from the solid orange "checked, not found" pill. */
+.kw-chip-unverified { background: #f4f4f5; border-style: dashed; border-color: #b8b8bd; color: #6b6b70; }
+.kw-chip-sel-cert:hover, .kw-chip-sel-un:hover { filter: brightness(1.08); }
+/* Only the trademarked word inside a pill goes red — the pill keeps its normal
+   certified/uncertified color. Vivid red + weight reads on both the light
+   (available) and dark (selected) pill backgrounds. */
+.kw-tm-word { color: #e5484d; font-weight: 800; }
+.kw-chip-sel-cert .kw-tm-word, .kw-chip-sel-un .kw-tm-word { color: #ffd2d2; }
+/* On hover the pill bg becomes --hi (orange-red); keep the flagged word readable. */
+.kw-chip:hover .kw-tm-word { color: #fff; }
+/* Hover card with full trademark match info for a red pill. Lives on <body>,
+   positioned in JS (showTmPopup). pointer-events:none so it never eats the
+   pill's mouseleave. */
+.kw-tm-popup { position: fixed; z-index: 50; width: 240px; max-width: calc(100vw - 16px); background: #fff; border: 1px solid #f1a9a9; border-radius: 8px; box-shadow: 0 8px 24px rgba(0,0,0,.16); padding: 10px 12px; font-size: 12px; color: #333; }
+.kw-tm-popup[hidden] { display: none; }
+.kw-tm-popup-x { position: absolute; top: 3px; right: 6px; border: none; background: none; font-size: 17px; line-height: 1; color: #bbb; cursor: pointer; padding: 2px 4px; }
+.kw-tm-popup-x:hover { color: #666; }
+.kw-tm-popup-link { display: inline-block; margin-top: 9px; font-size: 11px; font-weight: 700; color: #ea4800; text-decoration: none; }
+.kw-tm-popup-link:hover { text-decoration: underline; }
+.kw-tm-popup-h { font-size: 10px; font-weight: 700; color: #b42318; text-transform: uppercase; letter-spacing: .04em; }
+.kw-tm-popup-mark { font-size: 15px; font-weight: 800; margin: 2px 0 7px; word-break: break-word; }
+.kw-tm-popup-dl { margin: 0; display: flex; flex-direction: column; gap: 3px; }
+.kw-tm-popup-dl > div { display: flex; gap: 6px; }
+.kw-tm-popup-dl dt { flex: 0 0 52px; color: #999; margin: 0; }
+.kw-tm-popup-dl dd { flex: 1; min-width: 0; margin: 0; font-weight: 600; word-break: break-word; }
+.kw-tm-popup-foot { margin-top: 8px; font-size: 10px; color: #aaa; line-height: 1.4; }
+.kw-legend2 { display: flex; gap: 14px; font-size: 11px; color: #888; margin-top: 8px; }
+.kw-legend2 span { display: inline-flex; align-items: center; gap: 5px; }
+.kw-dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
+.kw-dot-cert { background: #1c7a43; }
+.kw-dot-un { background: #ef9c3a; }
+.kw-dot-tm { background: #d92d20; }
+.kw-tmscreen { font-size: 11px; border-radius: 6px; padding: 6px 9px; margin: 6px 0 8px; display: flex; align-items: center; gap: 6px; }
+.kw-tmscreen-run { background: #f5f5f5; border: 1px solid #e8e8e8; color: #888; }
+.kw-tmscreen-ok { background: #e9f7ef; border: 1px solid #ade0c0; color: #1c7a43; }
+.kw-tmscreen-warn { background: #fde8e8; border: 1px solid #f1a9a9; color: #b42318; }
+.kw-tmscreen .spin { width: 12px; height: 12px; border-width: 2px; }
+mark.kw-hl { background: #fff3bf; border-radius: 2px; padding: 0 1px; }
+.kw-tm-idle { background: #f5f5f5; border: 1px solid #e8e8e8; color: #888; }
+.kw-tm .kw-copy { float: none; margin-left: 8px; }
+.kw-class-pills { display: flex; flex-wrap: wrap; gap: 4px; }
+.kw-class-pill { padding: 3px 8px; border: 1px solid #ccc; border-radius: 12px; background: #fff; font-size: 11px; color: #666; cursor: pointer; }
+.kw-class-pill:hover { border-color: var(--hi); }
+.kw-class-on { background: var(--hi); border-color: var(--hi); color: #fff; }
+.gear { appearance: none; background: none; border: none; font-size: 17px; line-height: 1; cursor: pointer; color: #999; padding: 2px 2px 2px 2px; position: relative; }
+.gear:hover { color: var(--hi); }
+/* Settings-save failure: red dot on the gear so the error is visible while the
+   settings panel (and its detailed notice) is still closed. */
+.gear.gear-error::after { content: ''; position: absolute; top: 0; right: -1px; width: 8px; height: 8px; border-radius: 50%; background: #b42318; border: 1.5px solid #fff; }
+.settings-panel { position: fixed; top: 46px; right: 12px; z-index: 30; background: #fff; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 8px 24px rgba(0,0,0,.14); padding: 12px; width: 320px; max-width: calc(100vw - 24px); max-height: calc(100vh - 60px); overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
+.settings-panel[hidden] { display: none; }
+.settings-panel .kw-set-row { display: flex; gap: 8px; }
+.kw-save-status { margin: 0; padding: 6px 8px; font-size: 11px; color: #b42318; background: #fde8e8; border: 1px solid #f1a9a9; border-radius: 6px; }
+.kw-save-status[hidden] { display: none; }
+.settings-panel .kw-toggle { margin: 0; }
+.settings-panel .kw-cfg { margin: 0; }
+.kw-site-row { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; padding: 10px 16px 0; }
+.kw-site-label { font-size: 12px; font-weight: 700; color: #666; flex: 0 0 auto; }
+.kw-site-row select { flex: 1; min-width: 0; }
+.kw-site-status { flex: 1 1 100%; font-size: 11px; font-weight: 600; }
+.kw-site-status.kw-site-on { color: #1c7a43; }
+.kw-site-status.kw-site-off { color: #b26a00; }
+#kw-fields-section { margin-top: 12px; }
+.kw-modeseg { display: flex; gap: 0; margin: 12px 16px 0; border: 1px solid #ddd; border-radius: 8px; overflow: hidden; }
+.kw-seg { flex: 1; appearance: none; background: #fff; border: none; padding: 8px 10px; font-size: 13px; font-weight: 700; color: #888; cursor: pointer; }
+.kw-seg:hover { color: var(--hi); }
+.kw-seg-on { background: var(--hi); color: #fff; }
+.kw-seg + .kw-seg { border-left: 1px solid #ddd; }
+.kw-actions-row { display: flex; gap: 10px; padding: 12px 16px 4px; align-items: stretch; }
+.kw-btns { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px; }
+.kw-btns .kw-grab, .kw-btns .scan { width: 100%; margin: 0; }
+.kw-actions-row .kw-preview { margin: 0; flex: 1; min-width: 0; width: auto; max-width: none; max-height: none; align-self: stretch; object-fit: cover; }
+
+/* Trademarks taken out of a listing, each with a Ban button */
+.kw-tmmarks { margin-top: 8px; display: flex; flex-wrap: wrap; gap: 4px; }
+.kw-tmmarks-h { width: 100%; font-size: 11px; color: #666; }
+.kw-tmmark { display: inline-flex; align-items: center; gap: 4px; border: 1px solid #f3b3b3; background: #fff5f5; border-radius: 11px; padding: 1px 4px 1px 8px; font-size: 11px; }
+.kw-tmmark-meta { color: #888; }
+.kw-ban-btn { border: 1px solid #c62828; background: #fff; color: #c62828; border-radius: 9px; font-size: 10px; padding: 0 6px; cursor: pointer; }
+.kw-ban-btn:hover { background: #c62828; color: #fff; }
+.kw-ban-done { color: #2e7d32; font-size: 10px; }
+.kw-tm-popup-ban { margin-top: 6px; }
+.kw-ban-tm { background: #fdecea; border-color: #f3b3b3; color: #b71c1c; }

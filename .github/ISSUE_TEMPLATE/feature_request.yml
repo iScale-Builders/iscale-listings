@@ -1,0 +1,14 @@
+name: Feature request
+description: Propose a focused improvement
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem and desired behavior
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: Scope, alternatives and acceptance criteria
+      description: Do not include private account or shop data.

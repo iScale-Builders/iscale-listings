@@ -1,0 +1,11 @@
+{
+  "action": "iscale.listing.generate",
+  "mode": "plan",
+  "image": {
+    "path": "tests/fixtures/agentic-control/sample-design.png",
+    "source": "file"
+  },
+  "marketplace": "amazon-merch",
+  "validateEnabled": false,
+  "trademarkEnabled": false
+}

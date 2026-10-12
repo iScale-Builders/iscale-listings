@@ -1,0 +1,11 @@
+{
+  "action": "iscale.listing.generate",
+  "mode": "plan",
+  "image": {
+    "data_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==",
+    "source": "file"
+  },
+  "marketplace": "amazon-merch",
+  "validateEnabled": true,
+  "trademarkEnabled": true
+}

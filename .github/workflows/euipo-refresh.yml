@@ -1,0 +1,61 @@
+name: Weekly EUIPO Refresh
+
+permissions:
+  contents: read
+
+# Keeps the EUIPO mirror fresh. Unlike USPTO (daily delta files), EUIPO is an
+# API, so this runs import_euipo with --since = updateDate lower bound to pull
+# only marks changed in the trailing window (new marks + status changes).
+# Upserts are idempotent, so an overlapping lookback is safe.
+
+on:
+  schedule:
+    # Mondays 09:00 UTC
+    - cron: '0 9 * * 1'
+  workflow_dispatch:
+    inputs:
+      since:
+        description: 'updateDate lower bound (yyyy-MM-dd). Default: 8 days ago.'
+        required: false
+      classes:
+        description: 'Comma-separated Nice classes. Default: 9,16,18,20,21,24,25 (use e.g. 16 with an old since to backfill one class).'
+        required: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+
+      - name: Run EUIPO delta refresh
+        env:
+          EUIPO_CLIENT_ID: ${{ secrets.EUIPO_CLIENT_ID }}
+          EUIPO_CLIENT_SECRET: ${{ secrets.EUIPO_CLIENT_SECRET }}
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          SINCE_INPUT: ${{ github.event.inputs.since }}
+          CLASSES_INPUT: ${{ github.event.inputs.classes }}
+        run: |
+          SINCE="$SINCE_INPUT"
+          if [ -z "$SINCE" ]; then SINCE=$(date -u -d '8 days ago' +%Y-%m-%d); fi
+          TODAY=$(date -u +%Y-%m-%d)
+          CLASSES="${CLASSES_INPUT:-9,16,18,20,21,24,25}"
+          echo "EUIPO delta refresh: updateDate >= $SINCE, source-updated-at = $TODAY"
+          # batch-size 100 (default) avoids the 2026-06-29 / 2026-07-27
+          # Supabase statement_timeout (57014) on 500-row merge upserts.
+          # import_euipo.py also auto-splits timed-out batches and prints a
+          # --start-page resume command if a write still fails.
+          python scripts/import_euipo.py \
+            --since "$SINCE" \
+            --classes "$CLASSES" \
+            --partition-statuses \
+            --batch-size 100 \
+            --source-updated-at "$TODAY"

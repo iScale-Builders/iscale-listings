@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>iScaleListings</title>
+    <link rel="stylesheet" href="sidepanel.css" />
+  </head>
+  <body>
+    <div class="featuretabs" id="featuretabs">
+      <button class="ftab ftab-active" data-view="trademark">Trademark</button>
+      <button class="ftab" data-view="keywords">Keywords</button>
+      <span class="tabs-right">
+        <button class="gear" id="kw-settings-btn" title="Keyword settings (provider &amp; API key)" aria-label="Settings">⚙</button>
+        <span class="ver" id="ver">v…</span>
+      </span>
+    </div>
+
+    <div id="kw-settings-panel" class="settings-panel" hidden>
+      <p id="kw-save-status" class="kw-save-status" role="alert" hidden></p>
+      <div class="kw-set-row">
+        <select id="kw-provider" class="kw-input">
+          <option value="codex">ChatGPT/Codex subscription (local helper)</option>
+          <option value="openai">OpenAI API key</option>
+        </select>
+        <input id="kw-key" class="kw-input" type="password" placeholder="API key (stored locally)" autocomplete="off" />
+      </div>
+      <div class="kw-set-row" id="kw-engine-row">
+        <input id="kw-local-model" class="kw-input" type="text" placeholder="Codex model (blank = default, e.g. gpt-6-sol)" autocomplete="off" />
+      </div>
+      <p id="kw-sync-status" class="kw-sub"></p>
+      <span id="kw-model-wrap" class="kw-model-wrap"><select id="kw-model" class="kw-input" title="AI model"></select></span>
+      <label class="toggle kw-toggle"><input type="checkbox" id="kw-tm-enabled" checked /> Trademark-check the listing</label>
+      <input id="kw-tm-api-base" class="kw-input" type="text" placeholder="Trademark API URL — default http://localhost:3000" autocomplete="off" title="Base URL of your trademark API deployment" />
+      <details class="kw-cfg">
+        <summary>Listing settings</summary>
+        <div class="kw-cfg-body">
+          <div class="kw-cfg-h">Keyword validation</div>
+          <label class="toggle kw-toggle"><input type="checkbox" id="kw-validate-enabled" checked /> Validate keywords on Amazon autosuggest</label>
+          <input id="kw-variants" class="kw-input" placeholder="Product words to test with — e.g. shirt, tshirt, t-shirt" title="Product words each keyword is tested with on Amazon (comma-separated)" autocomplete="off" />
+          <div class="kw-sub">When on, each keyword is tested as “[keyword] [product word]” (e.g. “cat mom shirt”) against Amazon autosuggest and certified if it ranks. Off = use the keywords as-is (faster, none certified).</div>
+          <div class="kw-cfg-h" style="margin-top:12px">Prompt presets</div>
+          <div class="kw-fp-row">
+            <span class="kw-combo">
+              <input id="kw-preset" class="kw-input" type="text" role="combobox" aria-label="Prompt preset" aria-controls="kw-preset-list" aria-expanded="false" aria-autocomplete="none" autocomplete="off" spellcheck="false" title="Prompt preset — type a name and 💾 to save it, or pick one from the list" />
+              <button id="kw-preset-toggle" class="kw-icon-btn" type="button" title="Show all presets" aria-label="Show all presets" aria-haspopup="listbox" aria-expanded="false" aria-controls="kw-preset-list">▾</button>
+              <ul id="kw-preset-list" class="kw-combo-list" role="listbox" aria-label="Prompt presets" hidden></ul>
+            </span>
+            <button id="kw-preset-save" class="kw-icon-btn" title="Save the rules — a new name creates a new preset, the same name updates it" aria-label="Save preset">💾</button>
+            <button id="kw-preset-del" class="kw-icon-btn" title="Delete this preset" aria-label="Delete preset">🗑</button>
+          </div>
+          <div class="kw-cfg-h" style="margin-top:12px">AI prompt rules <span id="kw-instructions-reset" class="kw-copy">Reset to default</span></div>
+          <textarea id="kw-instructions" class="kw-textarea" spellcheck="false" placeholder="How the AI should write the listing…"></textarea>
+          <div class="kw-sub">Each preset stores its own rules. Edit the rules, type a new name and 💾 to save it as a new preset (the old one is kept); 💾 with the same name updates it. ▾ lists every preset — pick one to switch.</div>
+          <label class="toggle kw-toggle"><input type="checkbox" id="kw-max-fill" /> Max fill — pad each field close to its limit (append only, never rewrites)</label>
+          <div class="kw-sub">An extra AI pass adds sensible keyword phrases to the END of each field to use as much of the character limit as possible. It never changes the copy already written.</div>
+          <details class="kw-cfg" id="kw-fields-section">
+            <summary>Custom field presets</summary>
+            <div class="kw-cfg-body">
+              <div class="kw-fp-row">
+                <select id="kw-field-preset" class="kw-input" title="Field layout preset — double-click to name a new one"></select>
+                <input id="kw-fp-name" class="kw-input" placeholder="New preset name…" autocomplete="off" hidden />
+                <button id="kw-fp-save" class="kw-icon-btn" title="Save fields as a preset" aria-label="Save preset">💾</button>
+                <button id="kw-fp-del" class="kw-icon-btn" title="Delete this preset" aria-label="Delete preset">🗑️</button>
+              </div>
+              <div id="kw-fields"></div>
+              <button id="kw-add-field" class="kw-mini-btn">+ Add field</button>
+            </div>
+          </details>
+          <label class="toggle kw-toggle" style="margin-top:12px"><input type="checkbox" id="kw-allow-single-tm" /> Ignore ordinary single-word trademarks</label>
+          <div class="kw-sub">Ordinary one-word records stay informational. Famous brands (for example NIKE) and multi-word marks remain blocking.</div>
+          <div class="kw-cfg-h" style="margin-top:12px">Banned words <span id="kw-reset-ban" class="kw-copy">Reset</span></div>
+          <div class="kw-ban-add">
+            <input id="kw-ban-input" class="kw-input" placeholder="comma-separated…" autocomplete="off" />
+            <button id="kw-add-ban" class="kw-mini-btn">Add</button>
+          </div>
+          <div id="kw-forbidden" class="kw-bans"></div>
+          <div class="kw-cfg-h" style="margin-top:12px">Portable settings</div>
+          <div class="kw-fp-row">
+            <button id="kw-export-settings" class="kw-mini-btn">⬇ Export settings</button>
+            <button id="kw-import-settings" class="kw-mini-btn">⬆ Import settings</button>
+            <input id="kw-import-file" type="file" accept=".json,application/json" hidden />
+          </div>
+          <div class="kw-sub">Move your prompt rules, presets, fields, trademark classes and banned words to the CLI or another computer. CLI side: <code>iscale settings import &lt;file&gt;</code> / <code>iscale settings export &lt;file&gt;</code>. API keys are never included.</div>
+          <label class="toggle kw-toggle" style="margin-top:8px"><input type="checkbox" id="kw-auto-share" checked /> Share settings with the CLI automatically (when <code>iscale helper</code> is running)</label>
+        </div>
+      </details>
+    </div>
+
+    <div class="view" id="view-trademark">
+    <div class="modetabs" id="modetabs">
+      <button class="modetab modetab-active" data-mode="any" id="mode-any">Any site</button>
+      <button class="modetab" data-mode="amazon" id="mode-amazon">Amazon</button>
+      <button class="modetab" data-mode="etsy" id="mode-etsy">Etsy</button>
+    </div>
+    <div class="juris-row"><span class="juris-label">Registries</span><div class="juris" id="juris" role="group" aria-label="Trademark registries to check"></div></div>
+    <div class="cats" id="cats"></div>
+    <div class="legend" id="legend"></div>
+    <button id="scan" class="scan">Scan this page</button>
+    <p class="tip">…or select any text on the page to check just that. Results add up across types.</p>
+    <div class="status-filters" id="status-filters" aria-label="Trademark status visibility">
+      <label class="status-filter"><input type="checkbox" data-status="live" checked /> Live</label>
+      <label class="status-filter"><input type="checkbox" data-status="pending" checked /> Pending</label>
+      <label class="status-filter"><input type="checkbox" data-status="dead" checked /> Dead/cancelled</label>
+      <label class="status-filter"><input type="checkbox" id="show-single" /> Single-word marks</label>
+    </div>
+    <button id="clear" class="clearbtn" hidden>Clear all results</button>
+    <div class="body" id="body"><p class="hint">Pick a category, then scan the page or select text.</p></div>
+    </div>
+
+    <div class="view" id="view-keywords" hidden>
+      <div class="juris-row"><span class="juris-label">Registries</span><div class="juris" id="kw-juris" role="group" aria-label="Keyword and listing trademark registries to check"></div></div>
+      <div class="kw-site-row">
+        <label class="kw-site-label" for="kw-site">Site</label>
+        <select id="kw-site" class="kw-input">
+          <option value="none">No site — manual</option>
+          <option value="amazon-merch">Amazon Merch — auto-connect</option>
+          <option value="etsy">Etsy</option>
+        </select>
+        <span class="kw-site-status" id="kw-site-status" hidden></span>
+      </div>
+      <div class="kw-modeseg" id="kw-modeseg">
+        <button class="kw-seg kw-seg-on" data-runmode="auto">⚡ Auto</button>
+        <button class="kw-seg" data-runmode="manual">🔍 Manual</button>
+      </div>
+      <div class="kw-actions-row">
+        <div class="kw-btns">
+          <button id="kw-grab" class="kw-grab">📥 Use the design on this page</button>
+          <button id="kw-generate" class="scan" disabled>Submit</button>
+        </div>
+        <label class="kw-preview-slot" for="kw-file" title="Click to choose a design image">
+          <img id="kw-preview" class="kw-preview" hidden alt="design preview" />
+          <span class="kw-preview-empty" id="kw-preview-empty">📷<br />Choose image</span>
+        </label>
+      </div>
+      <input id="kw-file" type="file" accept="image/*" hidden />
+      <p class="tip" id="kw-grab-note" hidden></p>
+      <button id="kw-clear" class="clearbtn" hidden>Clear &amp; start over</button>
+      <div class="body" id="kw-body"><p class="hint">On the Amazon Merch upload page? Upload your art, hit “Use the design on this page,” and it’ll read the file, validate keywords against Amazon autosuggest, fill your listing fields, and trademark-check them. Or choose a file manually.</p></div>
+    </div>
+
+    <div class="foot" id="foot"></div>
+    <script src="sidepanel.js"></script>
+  </body>
+</html>
