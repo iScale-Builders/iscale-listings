@@ -43,7 +43,7 @@
     "next": "15.5.27",
     "pg": "8.23.0",
     "playwright-core": "^1.60.0",
-    "react": "^18.3.1",
+    "react": "^19.3.1",
     "react-dom": "^18.3.1",
     "zod": "^3.24.1"
   },
@@ -52,7 +52,7 @@
     "@types/chrome": "^0.1.43",
     "@types/node": "^22.19.19",
     "@types/pg": "8.23.1",
-    "@types/react": "^18.3.29",
+    "@types/react": "^19.3.0",
     "@types/react-dom": "^18.3.5",
     "esbuild": "^0.28.1",
     "eslint": "^8.57.1",
